@@ -9,12 +9,8 @@ const data =[
 export default class Counter extends Component {
     state ={
         data ,
-        total: data.reduce((accumulator, currentValue) => accumulator + currentValue.count, 0)
+        total: 0,
     };
-
-    getTotal = (step) => {
-        this.setState(prevState => ({total : prevState.total + step}))
-    }
 
     onIncrement = (id,steps=1) =>{
         this.setState(prevState =>{
@@ -31,16 +27,18 @@ export default class Counter extends Component {
     }
 
     onDecrement = (id,steps=1) =>{
+        let isDec=false;
         this.setState(prevState =>{
             return{
                 data:prevState.data.map(item=>{
                     if(item.id === id && item.count>0){
+                        isDec=true;
                             return {...item,count:item.count-steps};
                     }
                     return item;
                 }),
                 
-                total : this.state.total >0 ? prevState.total - steps : prevState.total
+                total : isDec? prevState.total - steps : prevState.total
                 
             }}
         );
@@ -49,7 +47,7 @@ export default class Counter extends Component {
         return (
             <div>
                 {this.state.data.map(item => {
-                    return <Counters key={item.id} {...item} onIncrement={this.onIncrement} onDecrement={this.onDecrement} getTotal={this.getTotal}/>
+                    return <Counters key={item.id} {...item} onIncrement={this.onIncrement} onDecrement={this.onDecrement}/>
                 })}
                 <p>Total : {this.state.total}</p>
             </div>
